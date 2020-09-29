@@ -22,24 +22,48 @@
 	# Tester si une variable GET 'action' est précisée dans l'URL index.php?action=...
 	$action = (isset($_GET['action'])) ? htmlentities($_GET['action']) : 'default';
 	# Quelle action est demandée ?
-	switch($action) {
-		case 'genese':
-			require_once('controllers/GeneseController.php');	
-			$controller = new GeneseController();
-			break;
-		case 'livres':
-			require_once('controllers/LivresController.php');	
-			$controller = new LivresController();
-			break;
-		case 'contact':
-			require_once('controllers/ContactController.php');	
-			$controller = new ContactController();
-			break;	
-		default: # Par défaut, le contrôleur de l'accueil est sélectionné
-			require_once('controllers/AccueilController.php');	
-			$controller = new AccueilController();
-			break;
-	}
+
+function controlGenesisController(): GeneseController
+{
+    require_once('controllers/GeneseController.php');
+    $controller = new GeneseController();
+    return $controller;
+}
+function controlContactController(): ContactController
+{
+    require_once('controllers/ContactController.php');
+    $controller = new ContactController();
+    return $controller;
+}
+
+function controlLivreController(): LivreController
+{
+    require_once('controllers/LivreController.php');
+    $controller = new LivreController();
+    return $controller;
+}
+
+function controlAccueilController(): AccueilController
+{
+    require_once('controllers/AccueilController.php');
+    $controller = new AccueilController();
+    return $controller;
+}
+
+switch ($_GET['action']) {
+    case 'genese': # action=genese
+        $controller = controlGenesisController();
+        break;
+    case 'contact': # action=contact
+        $controller = controlContactController();
+        break;
+    case 'livre':
+        $controller = controlLivreController();
+        break;
+    default: # dans tous les autres cas l'action=accueil
+        $controller = controlAccueilController();
+        break;
+}
 	# Exécution du contrôleur correspondant à l'action demandée
 	$controller->run();
 	
